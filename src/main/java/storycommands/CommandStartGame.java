@@ -3,20 +3,18 @@ package storycommands;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
-import sessionutils.PoolManager;
 import storyengine.ActiveSession;
-import storyengine.StoryEngine;
-import storyutils.StoryLoader;
+import storyengine.QuestEngine;
 
 /**
  * Created by Petr on 01.10.2016.
  */
 
 
-public class CommandStartGame extends StoryBaseCommand {
-    private StoryEngine engine;
+public class CommandStartGame extends QuestBaseCommand {
+    private QuestEngine engine;
 
-    public CommandStartGame(String commandIdentifier, String description, StoryEngine engine) {
+    public CommandStartGame(String commandIdentifier, String description, QuestEngine engine) {
         super(commandIdentifier, description);
 
         this.engine = engine;
@@ -25,15 +23,21 @@ public class CommandStartGame extends StoryBaseCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         if(strings.length != 0) {
             try {
-                String userName = user.getUserName();
+                String userName = user.getId().toString(); //TODO change "username" usage to "userid" usage
                 engine.setActiveSession(userName, concatArguments(strings)); //create session with client
                 ActiveSession session = engine.getActiveSession(userName); //get active session with client
 
                 reply(session.getCurrentQuestion(), absSender, user, chat); //reply chat message
-                replyVariant(session.getCurrentAnswers(), absSender, user, chat); //print available list of answers
+                if(!session.isQuestEnd() && session.getCurrentAnswers() != null && session.getCurrentAnswers().size() > 0) {
+                    replyVariant(session.getCurrentAnswers(), absSender, user, chat); //print available list of answers
+                }
+            } catch (QuestEngine.QuestException e) {
+                reply(e.getMessage(), absSender, user, chat);
             } catch (Exception e) {
-                reply(e.toString(), absSender, user, chat);
+                e.printStackTrace();
             }
+        } else {
+            reply("Command usage:  /start <name of quest>", absSender, user, chat);
         }
     }
 }

@@ -25,7 +25,7 @@ public class StoryLoader {
     public void loadStories(){
         storyList = new ArrayList<Story>();
         for(final File entry : dir.listFiles()){
-            if(entry.isFile() && entry.getName().endsWith(".json")){
+            if(entry.isFile() && entry.getName().endsWith(".json") && entry.getName().toLowerCase().contains("quest")){
                 try {
                     BufferedReader br = new BufferedReader(new FileReader(entry));
                     StringBuilder builder = new StringBuilder();
@@ -46,7 +46,7 @@ public class StoryLoader {
 
     public Story getStoryByName(String name){
         for(final Story story : storyList){
-            if(story.getName().equals(name)){
+            if(story != null && story.getName().equals(name)){
                 return story;
             }
         }
@@ -58,7 +58,9 @@ public class StoryLoader {
         List<String> names = new ArrayList<String>();
 
         for(final Story story : storyList){
-            names.add(story.getName());
+            if(story != null) {
+                names.add(story.getName());
+            }
         }
 
         return names;

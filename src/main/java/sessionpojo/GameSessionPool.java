@@ -1,5 +1,6 @@
 package sessionpojo;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,11 +11,11 @@ import java.util.List;
 public class GameSessionPool {
     List<GameSession> sessions;
 
-    public List<GameSession> getSessions() {
+    public  List<GameSession> getSessions() {
         return sessions;
     }
 
-    public void setSessions(List<GameSession> sessions) {
+    public void setSessions( List<GameSession> sessions) {
         this.sessions = sessions;
     }
 }

@@ -29,6 +29,10 @@ public abstract class PoolManager {
         return storageType;
     }
 
+    public void setStorageType(StorageType storageType) {
+        this.storageType = storageType;
+    }
+
     public GameSessionPool getPool() {
         return pool;
     }
@@ -39,11 +43,11 @@ public abstract class PoolManager {
 
     public GameSession createClientSession(String userName, Story story) {
         GameSession gs = new GameSession();
-        gs.setGroup(0);
-        gs.setNode(0);
+        gs.setGroup(1);
+        gs.setNode(1);
         gs.setStory(story.getName());
         gs.setUser(userName);
-        gs.setWeight(0);
+        gs.setWeight(1);
         getPool().getSessions().add(gs);
         return gs;
     }
@@ -78,7 +82,7 @@ public abstract class PoolManager {
         }
     }
 
-    public void deleteGameSession(GameSession del) {
+    public void deleteClientSession(GameSession del) {
         List<GameSession> sessions = getPool().getSessions();
         GameSession ref = null;
 
@@ -92,6 +96,11 @@ public abstract class PoolManager {
         if(ref != null){
             sessions.remove(ref);
         }
+    }
+
+    public void createEmptyPool() {
+        pool = new GameSessionPool();
+        pool.setSessions(new ArrayList<GameSession>());
     }
 
     public abstract void saveSessions();
