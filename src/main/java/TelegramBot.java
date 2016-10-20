@@ -61,12 +61,12 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
 
     //@Override
     public String getBotUsername() {
-        return "gm11_bot";
+        return "";
     }
 
     //@Override
     public String getBotToken() {
-        return "285762062:AAFl8RHfdCiaVZ01TjG14Fvk7ghfmP2_f60";
+        return "";
     }
 
     //In case of invalid unsupported command calling /help
