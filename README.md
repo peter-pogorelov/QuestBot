@@ -12,12 +12,9 @@ TGE is an engine for text games launched in Telegram. It is written in Java and 
 
 Questions?
 --------------------------------------
-If you have any questions, please contact us via Telegram. 
-
-For developers (https://telegram.me/joinchat/Cgfq7T90hVE9YGfrHsEasQ).
-
-For everyone (https://telegram.me/gamebottelegram).
-
-NEWS about us (https://telegram.me/gamebottelegramusers).
+If you have any questions, please contact us via Telegram:
+- [For developers.](https://telegram.me/joinchat/Cgfq7T90hVE9YGfrHsEasQ)
+- [For everyone.](https://telegram.me/gamebottelegram)
+- [NEWS about us.](https://telegram.me/gamebottelegramusers)
 
 
