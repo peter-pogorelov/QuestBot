@@ -1,10 +1,10 @@
-{
+п»ї{
 	start_command_usage: {
 		en: "Command usage:  /start <name of quest>",
-		ru: "Использование команды: /start <название квеста>"
+		ru: "РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РєРѕРјР°РЅРґС‹: /start <РЅР°Р·РІР°РЅРёРµ РєРІРµСЃС‚Р°>"
 	},
 	info_command_usage: {
 		en: "Command usage:  /questinfo <name of quest>",
-		ru: "Использование команды: /questinfo <название квеста>"
+		ru: "РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РєРѕРјР°РЅРґС‹: /questinfo <РЅР°С‰РІР°РЅРё>"
 	}
 }

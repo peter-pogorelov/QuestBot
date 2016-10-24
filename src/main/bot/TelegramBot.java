@@ -6,6 +6,7 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import questutils.SettingsLoader;
+import questutils.Translator;
 import sessionutils.PersistentGameSessionManager;
 import sessionutils.GameSessionManager;
 import questcommands.choosecommands.CommandChoose;
@@ -53,12 +54,18 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
 
     public TelegramBot(){
         SettingsLoader.getIntance().loadSettings();
+        try {
+            Translator.getInstance().loadTranslations();
+        } catch (Translator.TranslatorException e) {
+            e.printStackTrace();
+            return;
+        }
+
         GameSessionManager gameSessionManager = new PersistentGameSessionManager(System.getProperty("user.dir").concat("/sessions.json"));
         gameSessionManager.loadSessions();
 
-        QuestLoader loader = new QuestLoader(System.getProperty("user.dir") + "/quests");
-        loader.loadQuests();
-        this.engine = new QuestEngine(loader, gameSessionManager);
+        QuestLoader.getInstance().loadQuests();
+        this.engine = new QuestEngine(gameSessionManager);
 
         registerCommands();
     }
@@ -82,7 +89,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
             if(helpCmd != null) {
                 helpCmd.execute(this, null, msg.getChat(), null);
             } else {
-                System.out.println("Something went wrong!"); //Заглушечка
+                throw new RuntimeException("Command " + HELP_CMD + " should be implemented!");
             }
         }
     }

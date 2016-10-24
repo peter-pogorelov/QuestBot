@@ -5,6 +5,7 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import questcommands.QuestBaseCommand;
 import questengine.QuestEngine;
+import questutils.QuestLoader;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class CommandQuests extends QuestBaseCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         StringBuilder builder = new StringBuilder();
         builder.append("List of available quests: \n");
-        List<String> stories = engine.getLoader().getStoryNames();
+        List<String> stories = QuestLoader.getInstance().getQuestNames();
         for(int i = 0; i < stories.size(); i++){
             builder.append(String.valueOf(i+1)).append(". ").append(stories.get(i)).append("\n");
         }

@@ -1,13 +1,10 @@
 package questutils;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.xml.internal.security.transforms.TransformationException;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -30,11 +27,11 @@ public class Translator {
     public static final String LOCALES_FILE = "translate.json";
     private File file;
     private Gson gson;
-    private TreeMap<String, Map<String, String>> locales;
+    private Map<String, Map<String, String>> locales;
     private static Translator translator;
 
     private Translator() {
-        this.file = new File(LOCALES_FILE);
+        this.file = new File(System.getProperty("user.dir") + "/" + LOCALES_FILE);
         this.gson = new Gson();
     }
 
@@ -48,14 +45,15 @@ public class Translator {
 
     public void loadTranslations() throws TranslatorException{
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.file));
+            Type type = new TypeToken<Map<String, Map<String, String>>>(){}.getType();
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), "UTF8"));
             StringBuilder builder = new StringBuilder();
             String currentLine;
 
             while ((currentLine = br.readLine()) != null)
                 builder.append(currentLine);
 
-            locales = gson.fromJson(builder.toString(), locales.getClass());
+            locales = gson.fromJson(builder.toString(), type);
         } catch (Exception e) {
             e.printStackTrace();
         }

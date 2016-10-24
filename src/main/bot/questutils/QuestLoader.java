@@ -13,15 +13,25 @@ import java.util.Map;
  * Created by Petr on 02.10.2016.
  */
 
-//class used to load stories
+//class used to load quests
 public class QuestLoader {
+    public static final String QUEST_DIR = "quests";
     private File dir;
     private List<Quest> questList;
     private Gson gson;
+    private static QuestLoader loader;
 
-    public QuestLoader(String dir) {
-        this.dir = new File(dir);
+    private QuestLoader() {
+        this.dir = new File(System.getProperty("user.dir") + "/" + QUEST_DIR);
         gson = new Gson();
+    }
+
+    public static QuestLoader getInstance() {
+        if(loader == null) {
+            loader = new QuestLoader();
+        }
+
+        return loader;
     }
 
     public void loadQuests(){
@@ -47,7 +57,7 @@ public class QuestLoader {
         }
     }
 
-    public Quest getStoryByName(String name){
+    public Quest getQuestByName(String name){
         for(final Quest quest : questList){
             if(quest != null && quest.getName().equals(name)){
                 return quest;
@@ -57,7 +67,7 @@ public class QuestLoader {
         return null;
     }
 
-    public List<String> getStoryNames(){
+    public List<String> getQuestNames(){
         List<String> names = new ArrayList<String>();
 
         for(final Quest quest : questList){

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.bots.AbsSender;
 import questcommands.QuestBaseCommand;
 import questengine.QuestEngine;
 import questpojo.Quest;
+import questutils.QuestLoader;
 
 /**
  * Created by Petr on 02.10.2016.
@@ -37,7 +38,7 @@ public class CommandQuestInfo extends QuestBaseCommand {
 
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings){
         if(strings.length != 0){
-            Quest find = engine.getLoader().getStoryByName(concatArguments(strings));
+            Quest find = QuestLoader.getInstance().getQuestByName(concatArguments(strings));
             if(find != null)
                 reply(new QuestInfo(find).getInfo(), absSender, user, chat);
             else

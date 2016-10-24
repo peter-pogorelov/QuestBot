@@ -8,7 +8,6 @@ public class Quest {
     private String author;
     private String description;
     private QuestGroup[] groups;
-    private String language;
 
     public void setName(String name) {
         this.name = name;
@@ -40,13 +39,5 @@ public class Quest {
 
     public QuestGroup[] getGroups() {
         return groups;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
     }
 }

@@ -37,7 +37,7 @@ public class CommandStartGame extends QuestBaseCommand {
                 e.printStackTrace();
             }
         } else {
-            reply("Command usage:  /start <name of quest>", absSender, user, chat);
+            reply("", absSender, user, chat);
         }
     }
 }

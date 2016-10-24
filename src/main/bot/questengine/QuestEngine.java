@@ -21,18 +21,15 @@ public class QuestEngine {
     }
 
     private Map<String, ActiveSession> sessionList;
-
-    private QuestLoader loader;
     private GameSessionManager manager;
 
-    public QuestEngine(QuestLoader loader, GameSessionManager manager) {
+    public QuestEngine(GameSessionManager manager) {
         sessionList = new HashMap<String, ActiveSession>();
-        this.loader = loader;
         this.manager = manager;
     }
 
     public void setActiveSession(String userName, String story) throws QuestException {
-        Quest quest = getLoader().getStoryByName(story); //get current story
+        Quest quest = QuestLoader.getInstance().getQuestByName(story); //get current story
         if(quest != null) {
             GameSession session = getManager().getGameSession(userName, quest); //load session from storage (save file)
             ActiveSession activeSession = getActiveSession(userName); //load active session
@@ -72,10 +69,6 @@ public class QuestEngine {
 
     public ActiveSession getActiveSession(String userName) {
         return sessionList.get(userName); //can be null
-    }
-
-    public QuestLoader getLoader() {
-        return loader;
     }
 
     public GameSessionManager getManager() {

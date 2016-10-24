@@ -1,5 +1,7 @@
 package sessionutils;
 
+import questutils.SettingsLoader;
+import questutils.Translator;
 import sessionpojo.GameSession;
 import sessionpojo.GameSessionPool;
 import questpojo.Quest;
@@ -45,6 +47,7 @@ public abstract class GameSessionManager {
         gs.setQuest(quest.getName());
         gs.setUser(userName);
         gs.setWeight(1);
+        gs.setLocale(SettingsLoader.getIntance().getSettings().getLocales().get(0)); //Setting first locale as main locale
         getPool().getSessions().add(gs);
         return gs;
     }
