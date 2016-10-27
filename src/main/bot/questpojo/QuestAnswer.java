@@ -9,6 +9,7 @@ public class QuestAnswer {
     private String text;
     private Integer weight;
     private String responce;
+    private Integer jump;
 
     public String getText() {
         return text;
@@ -32,5 +33,13 @@ public class QuestAnswer {
 
     public String getResponce() {
         return responce;
+    }
+
+    public Integer getJump() {
+        return jump;
+    }
+
+    public void setJump(Integer jump) {
+        this.jump = jump;
     }
 }

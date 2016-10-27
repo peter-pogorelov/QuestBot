@@ -2,6 +2,7 @@ package sessionutils;
 
 import com.google.gson.Gson;
 import sessionpojo.GameSessionPool;
+import utils.BotLogging;
 
 import java.io.*;
 
@@ -25,30 +26,24 @@ public class PersistentGameSessionManager extends GameSessionManager {
             writer.write(gson.toJson(getPool()));
             writer.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            BotLogging.getLogger().error(e.getMessage());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            BotLogging.getLogger().error(e.getMessage());
         }
     }
-    public void loadSessions() {
-        try {
-            if(file.isFile()) {
-                BufferedReader br = new BufferedReader(new FileReader(file));
+    public void loadSessions() throws Exception {
+        if(file.isFile()) {
+            BufferedReader br = new BufferedReader(new FileReader(file));
 
-                StringBuilder builder = new StringBuilder();
-                String currentLine = "";
+            StringBuilder builder = new StringBuilder();
+            String currentLine = "";
 
-                while ((currentLine = br.readLine()) != null)
-                    builder.append(currentLine);
+            while ((currentLine = br.readLine()) != null)
+                builder.append(currentLine);
 
-                setPool(gson.fromJson(builder.toString(), GameSessionPool.class));
-            } else {
-                createEmptyPool();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            setPool(gson.fromJson(builder.toString(), GameSessionPool.class));
+        } else {
+            createEmptyPool();
         }
     }
 }

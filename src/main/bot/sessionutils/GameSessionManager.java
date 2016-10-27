@@ -104,5 +104,5 @@ public abstract class GameSessionManager {
     }
 
     public abstract void saveSessions();
-    public abstract void loadSessions();
+    public abstract void loadSessions() throws Exception;
 }

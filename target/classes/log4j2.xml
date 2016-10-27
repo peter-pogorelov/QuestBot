@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="QuestBot" packages="">
+    <Appenders>
+        <File name="LoggingFile" fileName="logs/app.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <Async name="Async">
+            <AppenderRef ref="LoggingFile"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="Async"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

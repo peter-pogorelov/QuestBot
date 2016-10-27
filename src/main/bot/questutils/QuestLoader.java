@@ -34,25 +34,19 @@ public class QuestLoader {
         return loader;
     }
 
-    public void loadQuests(){
+    public void loadQuests() throws IOException{
         questList = new ArrayList<Quest>();
         for(final File entry : dir.listFiles()){
             if(entry.isFile() && entry.getName().toLowerCase().endsWith(".json")){
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(entry));
-                    StringBuilder builder = new StringBuilder();
-                    String currentLine = "";
+                BufferedReader br = new BufferedReader(new FileReader(entry));
+                StringBuilder builder = new StringBuilder();
+                String currentLine = "";
 
-                    while((currentLine = br.readLine()) != null)
-                        builder.append(currentLine);
+                while((currentLine = br.readLine()) != null)
+                    builder.append(currentLine);
 
-                    Quest quest = gson.fromJson(builder.toString(), Quest.class);
-                    questList.add(quest);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Quest quest = gson.fromJson(builder.toString(), Quest.class);
+                questList.add(quest);
             }
         }
     }

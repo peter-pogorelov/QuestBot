@@ -2,7 +2,6 @@
 	name: '',
 	author: '',
 	description: '',
-	language: 'en'
 	
 	groups: [
 		{
@@ -12,7 +11,7 @@
 					id: 1,
 					text: 'Question One.',
 					answers: [
-						{text: 'first answer', weight: 555, responce: 'first responce.'},
+						{text: 'first answer', weight: 555, responce: 'first responce.', jump:2},
 						{text: 'second answer', weight: 111, responce: 'second responce.'},
 						{text: 'third answer', weight: 111, responce: 'third responce.'},
 						{text: 'forth answer', weight: -123, responce: 'forth responce.'},

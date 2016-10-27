@@ -6,6 +6,10 @@ import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.bots.commands.ICommandRegistry;
 import questcommands.QuestBaseCommand;
+import questengine.ActiveSession;
+import questengine.QuestEngine;
+import questutils.Translator;
+import utils.BotLogging;
 
 import java.util.Collection;
 
@@ -14,21 +18,29 @@ import java.util.Collection;
  */
 public class CommandHelp extends QuestBaseCommand {
 
-    public CommandHelp(String commandIdentifier, String description) {
-        super(commandIdentifier, description);
+    public CommandHelp(String commandIdentifier, String description, QuestEngine engine) {
+        super(commandIdentifier, description, engine);
     }
 
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        Collection<BotCommand> cmds = ((ICommandRegistry)absSender).getRegisteredCommands();
-        StringBuilder builder = new StringBuilder();
-        builder.append("Welcome to Telegram Game!\n").append("We really like to see you here!\n\n");
+        try {
+            Collection<BotCommand> cmds = ((ICommandRegistry) absSender).getRegisteredCommands();
+            StringBuilder builder = new StringBuilder();
 
-        for(final BotCommand cmd : cmds){
-            if(cmd instanceof QuestBaseCommand && ((QuestBaseCommand)cmd).isVisible()) {
-                builder.append("/").append(cmd.getCommandIdentifier()).append(" - ").append(cmd.getDescription()).append("\n");
+            ActiveSession activeSession = engine.getActiveSession(user.getId().toString());
+            String welcome = Translator.getInstance().getTranslation("welcome", activeSession.getLocale());
+            String salute = Translator.getInstance().getTranslation("salute", activeSession.getLocale());
+            builder.append(welcome + "\n").append(salute + "\n\n");
+
+            for (final BotCommand cmd : cmds) {
+                if (cmd instanceof QuestBaseCommand && ((QuestBaseCommand) cmd).isVisible()) {
+                    builder.append("/").append(cmd.getCommandIdentifier()).append(" - ").append(cmd.getDescription()).append("\n");
+                }
             }
-        }
 
-        reply(builder.toString(), absSender, user, chat);
+            reply(builder.toString(), absSender, user, chat);
+        } catch (Exception e) {
+            BotLogging.getLogger().fatal(e.getMessage());
+        }
     }
 }

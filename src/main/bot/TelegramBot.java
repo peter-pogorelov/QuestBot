@@ -16,6 +16,7 @@ import questcommands.infocommands.CommandQuests;
 import questcommands.infocommands.CommandQuestInfo;
 import questengine.QuestEngine;
 import questutils.QuestLoader;
+import utils.BotLogging;
 
 public class TelegramBot extends TelegramLongPollingCommandBot {
     public static final String START_CMD = "start";
@@ -34,13 +35,13 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
         try {
             telegramBotsApi.registerBot(new TelegramBot());
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            BotLogging.getLogger().fatal(e.getMessage());
         }
     }
 
     public void registerCommands() {
         register(new CommandStartGame(START_CMD, "Start new game", engine));
-        register(new CommandHelp(HELP_CMD, "List of questcommands available"));
+        register(new CommandHelp(HELP_CMD, "List of questcommands available", engine));
         register(new CommandQuests(STORIES_CMD, "List of stories available", engine));
         register(new CommandQuestInfo(STORYINFO_CMD, "Describe specific story, use name after cmd", engine));
         register(new CommandResetGame(RESET_CMD, "Reset current story or specific, use name after cmd as optional parameter", engine));
@@ -53,21 +54,21 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
     }
 
     public TelegramBot(){
-        SettingsLoader.getIntance().loadSettings();
+        //Order does matter
         try {
+            SettingsLoader.getIntance().loadSettings();
             Translator.getInstance().loadTranslations();
-        } catch (Translator.TranslatorException e) {
-            e.printStackTrace();
-            return;
+            QuestLoader.getInstance().loadQuests();
+
+            GameSessionManager gameSessionManager = new PersistentGameSessionManager(System.getProperty("user.dir").concat("/sessions.json"));
+            gameSessionManager.loadSessions();
+
+            this.engine = new QuestEngine(gameSessionManager);
+
+            registerCommands();
+        } catch (Exception e) {
+            BotLogging.getLogger().fatal(e.getMessage());
         }
-
-        GameSessionManager gameSessionManager = new PersistentGameSessionManager(System.getProperty("user.dir").concat("/sessions.json"));
-        gameSessionManager.loadSessions();
-
-        QuestLoader.getInstance().loadQuests();
-        this.engine = new QuestEngine(gameSessionManager);
-
-        registerCommands();
     }
 
     //@Override
@@ -89,7 +90,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
             if(helpCmd != null) {
                 helpCmd.execute(this, null, msg.getChat(), null);
             } else {
-                throw new RuntimeException("Command " + HELP_CMD + " should be implemented!");
+                BotLogging.getLogger().error("Command " + HELP_CMD + " should be implemented!");
             }
         }
     }

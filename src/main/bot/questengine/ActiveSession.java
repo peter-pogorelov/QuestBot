@@ -15,6 +15,7 @@ public class ActiveSession {
     private Quest quest;
     private QuestGroup group;
     private QuestNode node;
+    private String locale;
 
     public ActiveSession(Quest quest, GameSession gameSession) {
         this.quest = quest;
@@ -22,26 +23,7 @@ public class ActiveSession {
         this.group = getGroupFromSession(this.quest, gameSession);
         this.node = getNodeFromSession(group, gameSession);
         this.weight = gameSession.getWeight();
-    }
-
-    private Integer getWeight() {
-        return weight;
-    }
-
-    public Quest getQuest() {
-        return quest;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    private QuestGroup getGroup() {
-        return group;
-    }
-
-    private QuestNode getNode() {
-        return node;
+        this.locale = gameSession.getLocale();
     }
 
     public GameSession toGameSession() {
@@ -97,12 +79,20 @@ public class ActiveSession {
     //should be called at the very end, updates weight and redirects to another node
     public void toNextNode(int answerId) {
         if(answerId - 1 < getNode().getAnswers().length) {
-            QuestAnswer answer = getNode().getAnswers()[answerId - 1];
-            this.weight += answer.getWeight();
+            QuestAnswer answer = getNode().getAnswers()[answerId - 1]; //Get current answer
+            if(answer.getWeight() != null) {
+                this.weight += answer.getWeight(); //Update weights if its provided in quest
+            }
 
-            int currentNodeId = getNode().getId() - 1;
-            if(getGroup().getNodes().length > currentNodeId + 1) {
-                QuestNode nextNode = getGroup().getNodes()[currentNodeId + 1];
+            if(answer.getJump() != null) {
+                this.group = quest.getGroups()[answer.getJump()-1]; //To following group
+                this.node = this.getGroup().getNodes()[0]; //To first node
+            }
+
+            int currentNodeIndex = getNode().getId() - 1; //Index it bigger by 1
+
+            if(getGroup().getNodes().length > currentNodeIndex + 1) {
+                QuestNode nextNode = getGroup().getNodes()[currentNodeIndex + 1];
 
                 if(nextNode.getGotos() != null && nextNode.getGotos().length != 0) {
                     if(!tryProcessGotos(nextNode)) {
@@ -162,5 +152,33 @@ public class ActiveSession {
         }
 
         return currentNode;
+    }
+
+    private Integer getWeight() {
+        return weight;
+    }
+
+    public Quest getQuest() {
+        return quest;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    private QuestGroup getGroup() {
+        return group;
+    }
+
+    private QuestNode getNode() {
+        return node;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 }

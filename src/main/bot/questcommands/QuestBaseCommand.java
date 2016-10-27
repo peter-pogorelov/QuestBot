@@ -6,6 +6,8 @@ import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
+import questengine.QuestEngine;
+import questpojo.Quest;
 
 import java.util.List;
 
@@ -14,9 +16,11 @@ import java.util.List;
  */
 public abstract class QuestBaseCommand extends BotCommand {
     protected boolean visible = true;
+    protected QuestEngine engine;
 
-    public QuestBaseCommand(String commandIdentifier, String description) {
+    public QuestBaseCommand(String commandIdentifier, String description, QuestEngine engine) {
         super(commandIdentifier, description);
+        this.engine = engine;
     }
 
     public boolean isVisible() {

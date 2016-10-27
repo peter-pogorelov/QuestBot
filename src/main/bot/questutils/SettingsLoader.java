@@ -2,9 +2,7 @@ package questutils;
 
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -22,19 +20,15 @@ public class SettingsLoader {
         this.gson = new Gson();
     }
 
-    public void loadSettings(){
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(this.file));
-            StringBuilder builder = new StringBuilder();
-            String currentLine;
+    public void loadSettings() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(this.file));
+        StringBuilder builder = new StringBuilder();
+        String currentLine;
 
-            while ((currentLine = br.readLine()) != null)
-                builder.append(currentLine);
+        while ((currentLine = br.readLine()) != null)
+            builder.append(currentLine);
 
-            settings = gson.fromJson(builder.toString(), Settings.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        settings = gson.fromJson(builder.toString(), Settings.class);
     }
 
     public static SettingsLoader getIntance() {

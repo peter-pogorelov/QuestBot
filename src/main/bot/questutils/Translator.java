@@ -2,6 +2,8 @@ package questutils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.telegram.telegrambots.logging.BotLogger;
+import utils.BotLogging;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -43,20 +45,16 @@ public class Translator {
         return translator;
     }
 
-    public void loadTranslations() throws TranslatorException{
-        try {
-            Type type = new TypeToken<Map<String, Map<String, String>>>(){}.getType();
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), "UTF8"));
-            StringBuilder builder = new StringBuilder();
-            String currentLine;
+    public void loadTranslations() throws TranslatorException, IOException {
+        Type type = new TypeToken<Map<String, Map<String, String>>>(){}.getType();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), "UTF8"));
+        StringBuilder builder = new StringBuilder();
+        String currentLine;
 
-            while ((currentLine = br.readLine()) != null)
-                builder.append(currentLine);
+        while ((currentLine = br.readLine()) != null)
+            builder.append(currentLine);
 
-            locales = gson.fromJson(builder.toString(), type);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        locales = gson.fromJson(builder.toString(), type);
 
         checkBotLocales();
     }
