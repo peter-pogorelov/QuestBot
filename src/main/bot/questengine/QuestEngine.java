@@ -1,9 +1,12 @@
 package questengine;
 
+import org.glassfish.hk2.utilities.reflection.Logger;
+import questutils.Translator;
 import sessionpojo.GameSession;
 import sessionutils.GameSessionManager;
 import questpojo.*;
 import questutils.QuestLoader;
+import utils.BotLogging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,48 +33,78 @@ public class QuestEngine {
 
     public void setActiveSession(String userName, String story) throws QuestException {
         Quest quest = QuestLoader.getInstance().getQuestByName(story); //get current story
-        if(quest != null) {
-            GameSession session = getManager().getGameSession(userName, quest); //load session from storage (save file)
-            ActiveSession activeSession = getActiveSession(userName); //load active session
+        ActiveSession activeSession = getActiveSession(userName); //load active session
 
+        if(quest == null) {
+            try {
+                String questNotExists = Translator.getInstance().getTranslation("quest_not_exists", activeSession.getLocale());
+                throw new QuestException(questNotExists);
+            } catch (Translator.UnknownTranslationException e) {
+                BotLogging.getLogger().fatal(e);
+            }
+        }
+
+        GameSession session = getManager().getGameSession(userName, quest); //load session from storage (save file)
+
+        if(session == null) {
+            session = getManager().createClientSession(userName, quest); //register session
+            getManager().saveSessions(); //save session in storage
+        }
+
+        if(activeSession != null) { //save current active session if it already exists
+            if(!activeSession.getQuest().getName().equals(quest.getName())) {
+                saveToGameSession(userName);
+            } else {
+                return; //if this story is already going for this user
+            }
+        }
+
+        newActiveSession(quest, session);
+    }
+
+    public void saveToGameSession(String userName) throws QuestException {
+        ActiveSession activeSession = getActiveSession(userName);
+        if(activeSession != null) {
+            getManager().updateGameSession(activeSession.toGameSession());
+            getManager().saveSessions();
+        } else {
+            try {
+                String saveSessionFailure = Translator.getInstance().getTranslation("save_session_failure", activeSession.getLocale());
+                throw new QuestException(saveSessionFailure);
+            } catch (Translator.UnknownTranslationException e) {
+                BotLogging.getLogger().fatal(e);
+            }
+        }
+    }
+
+    public ActiveSession getActiveSession(String userName) {
+        ActiveSession activeSession = sessionList.get(userName); //can be null
+        if(activeSession == null) {
+            GameSession session = getManager().getGameSession(userName); //get any game session
             if(session == null) {
-                session = getManager().createClientSession(userName, quest); //register session
+                session = getManager().createClientSession(userName); //create session without specified quest
                 getManager().saveSessions(); //save session in storage
             }
 
-            if(activeSession != null) {
-                getManager().updateGameSession(activeSession.toGameSession()); //save current active session to storage
-                getManager().saveSessions(); //
-            }
-
-            createActiveSession(quest, session);
-            return;
+            activeSession = newActiveSession(session);
         }
 
-        throw new QuestException("Following story does not exists!");
+        return activeSession;
     }
 
-    private ActiveSession createActiveSession(Quest quest, GameSession session) {
+    public GameSessionManager getManager() {
+        return manager;
+    }
+
+    private ActiveSession newActiveSession(Quest quest, GameSession session) {
         ActiveSession activeSession = new ActiveSession(quest, session);
         sessionList.put(session.getUser(), activeSession);
         return activeSession;
     }
 
-    public void saveClientSession(String userName) throws QuestException {
-        ActiveSession session = getActiveSession(userName);
-        if(session != null) {
-            getManager().updateGameSession(session.toGameSession());
-            getManager().saveSessions();
-        } else {
-            throw new QuestException("Could not save client session due its not exists");
-        }
-    }
-
-    public ActiveSession getActiveSession(String userName) {
-        return sessionList.get(userName); //can be null
-    }
-
-    public GameSessionManager getManager() {
-        return manager;
+    private ActiveSession newActiveSession(GameSession session) {
+        ActiveSession activeSession = new ActiveSession(session);
+        sessionList.put(session.getUser(), activeSession);
+        return activeSession;
     }
 }

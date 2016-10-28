@@ -18,11 +18,15 @@ public class ActiveSession {
     private String locale;
 
     public ActiveSession(Quest quest, GameSession gameSession) {
+        this(gameSession);
         this.quest = quest;
-        this.userName = gameSession.getUser();
         this.group = getGroupFromSession(this.quest, gameSession);
         this.node = getNodeFromSession(group, gameSession);
         this.weight = gameSession.getWeight();
+    }
+
+    public ActiveSession(GameSession gameSession) {
+        this.userName = gameSession.getUser();
         this.locale = gameSession.getLocale();
     }
 
@@ -87,6 +91,7 @@ public class ActiveSession {
             if(answer.getJump() != null) {
                 this.group = quest.getGroups()[answer.getJump()-1]; //To following group
                 this.node = this.getGroup().getNodes()[0]; //To first node
+                return;
             }
 
             int currentNodeIndex = getNode().getId() - 1; //Index it bigger by 1
