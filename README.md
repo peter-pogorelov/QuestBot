@@ -21,6 +21,7 @@ We strive to establish a clear and transparent process of the development of the
 - Suggestions are located in the issues. After that we disscuss them in our [Telegram chat](https://telegram.me/joinchat/Cgfq7T90hVE9YGfrHsEasQ).
 - Format of commits: name of commit = name of feature. In the description should be specified an algorithm, changes, and possible influence of this commit. For non-trivial changes it would be better to create Unit tests.
 - Manual you can find in the Wiki section.
+- Commit must be bound with issues.
 
 Questions?
 --------------------------------------
@@ -29,4 +30,9 @@ If you have any questions, please contact us via Telegram:
 - [For everyone.](https://telegram.me/gamebottelegram)
 - [NEWS about us.](https://telegram.me/gamebottelegramusers)
 
+History of correspondences of the developers of the chat will be saved manually chat admins and stored in the [cloud.](https://drive.google.com/open?id=0B_nRblfwQpXXTnlzVU9MZ29NTzQ)
 
+
+Donations
+--------------------------------------
+If  you want to danate money, contact with us via E-Mail: telegramgameengine@gmail.com.
