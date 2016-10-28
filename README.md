@@ -19,14 +19,20 @@ We strive to establish a clear and transparent process of the development of the
 - Current bugs are located in the tracker on GitHub.
 - Unit test are written before the releasing a stable version.
 - Suggestions are located in the issues. After that we disscuss them in our [Telegram chat](https://telegram.me/joinchat/Cgfq7T90hVE9YGfrHsEasQ).
-- Format of commits: name of commit = name of feature. In the description should be specified an algorithm, changes, and possible influence of this commit. For non-trivial changes it would be better to create Unit tests.
-- Manual you can find in the Wiki section.
+- Format of commits: name of commit = name of feature. In the description should be specified an algorithm, changes, and possible influence of this commit. For non-trivial changes it would be better to create Unit tests. Commits should be associated with issues.
+- Manual could be found in the Wiki section.
 
 Questions?
 --------------------------------------
 If you have any questions, please contact us via Telegram:
-- [For developers.](https://telegram.me/joinchat/Cgfq7T90hVE9YGfrHsEasQ)
-- [For everyone.](https://telegram.me/gamebottelegram)
-- [NEWS about us.](https://telegram.me/gamebottelegramusers)
+- [For developers](https://telegram.me/joinchat/Cgfq7T90hVE9YGfrHsEasQ);
+- [For everyone](https://telegram.me/gamebottelegram);
+- [NEWS about us](https://telegram.me/gamebottelegramusers).
 
+We backup our conversation each month. You can find the history of messages [here](https://drive.google.com/open?id=0B_nRblfwQpXXTnlzVU9MZ29NTzQ).
 
+Support Us
+--------------------------------------
+If you want to help us to improve the project, please, contact us [telegramgameengine@gmail.com](mailto:telegramgameengine@gmail.com). 
+
+The information for sponsors could be found [here](https://github.com/AndreyKoryakin/QuestBot/blob/master/TGE.pdf).
