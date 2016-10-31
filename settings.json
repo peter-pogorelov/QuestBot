@@ -1,0 +1,5 @@
+{
+	locales: ["en", "ru"],
+	botUserName: "gm11_bot",
+	botToken : "285762062:AAFl8RHfdCiaVZ01TjG14Fvk7ghfmP2_f60"
+}
