@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created by Petr on 24.10.2016.
  */
-public class SettingsLoader {
+public final class SettingsLoader {
     public static final String SETTHINGS_FILE = "settings.json";
     private File file;
     private Gson gson;

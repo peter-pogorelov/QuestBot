@@ -32,11 +32,13 @@ public class ActiveSession {
 
     public GameSession toGameSession() {
         GameSession ret = new GameSession();
+        ret.setUser(userName);
+        ret.setLocale(locale);
         ret.setNode(node.getId());
         ret.setGroup(group.getId());
         ret.setWeight(weight);
-        ret.setUser(userName);
         ret.setQuest(quest.getName());
+
         return ret;
     }
 

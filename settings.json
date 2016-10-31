@@ -1,3 +1,5 @@
 {
-	locales: ["en", "ru"]
+	locales: ["en", "ru"],
+	botUserName: "PUT BOT USERNAME HERE",
+	botToken : "PUT YOUR TOKEN HERE"
 }

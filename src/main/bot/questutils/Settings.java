@@ -9,6 +9,8 @@ import java.util.List;
 //POJO class
 public class Settings {
     private List<String> locales;
+    private String botUserName;
+    private String botToken;
 
     public List<String> getLocales() {
         return locales;
@@ -16,5 +18,21 @@ public class Settings {
 
     public void setLocales(List<String> locales) {
         this.locales = locales;
+    }
+
+    public String getBotUserName() {
+        return botUserName;
+    }
+
+    public void setBotUserName(String botUserName) {
+        this.botUserName = botUserName;
+    }
+
+    public String getBotToken() {
+        return botToken;
+    }
+
+    public void setBotToken(String botToken) {
+        this.botToken = botToken;
     }
 }

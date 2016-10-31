@@ -21,10 +21,11 @@ public class CommandStartGame extends QuestBaseCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         try {
             String userName = user.getId().toString(); //TODO change "username" usage to "userid" usage
-            engine.setActiveSession(userName, concatArguments(strings)); //create session with client
             ActiveSession activeSession = engine.getActiveSession(userName); //get active session with client
             String startCommandUsage = Translator.getInstance().getTranslation("start_command_usage", activeSession.getLocale());
             if (strings.length != 0) {
+                engine.setActiveSession(userName, concatArguments(strings)); //create session with client
+                activeSession = engine.getActiveSession(userName); //update with new active session
                 reply(activeSession.getCurrentQuestion(), absSender, user, chat); //reply chat message
                 if (!activeSession.isQuestEnd() && activeSession.getCurrentAnswers() != null && activeSession.getCurrentAnswers().size() > 0) {
                     replyVariant(activeSession.getCurrentAnswers(), absSender, user, chat); //print available list of answers
@@ -33,9 +34,9 @@ public class CommandStartGame extends QuestBaseCommand {
                 reply(startCommandUsage, absSender, user, chat);
             }
         } catch (QuestEngine.QuestException e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            reply(e.getMessage(), absSender, user, chat);
         } catch (Translator.UnknownTranslationException e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
         }
     }
 }

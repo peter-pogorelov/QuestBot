@@ -38,7 +38,7 @@ public class CommandQuests extends QuestBaseCommand {
 
             reply(builder.toString(), absSender, user, chat);
         } catch (Translator.UnknownTranslationException e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
         }
     }
 }

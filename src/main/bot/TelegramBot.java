@@ -1,3 +1,5 @@
+import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.User;
 import questcommands.*;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
@@ -18,6 +20,8 @@ import questengine.QuestEngine;
 import questutils.QuestLoader;
 import utils.BotLogging;
 
+import java.io.IOException;
+
 public class TelegramBot extends TelegramLongPollingCommandBot {
     public static final String START_CMD = "start";
     public static final String HELP_CMD = "help";
@@ -26,6 +30,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
     public static final String RESET_CMD = "reset";
     public static final String SAVE_CMD = "save";
     public static final String CURRENT_CMD = "current";
+    public static final String LOCALE_CMD = "setlocale";
     public static final int    MAX_ANSWERS = 10;
 
     private QuestEngine engine;
@@ -33,20 +38,24 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
     public static void main(String[] args) {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
+            SettingsLoader.getIntance().loadSettings();
             telegramBotsApi.registerBot(new TelegramBot());
         } catch (TelegramApiException e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
+        } catch (IOException e) {
+            BotLogging.getLogger().fatal(e);
         }
     }
 
     public void registerCommands() {
-        register(new CommandStartGame(START_CMD, "Start new game", engine));
-        register(new CommandHelp(HELP_CMD, "List of questcommands available", engine));
-        register(new CommandQuests(STORIES_CMD, "List of stories available", engine));
-        register(new CommandQuestInfo(STORYINFO_CMD, "Describe specific story, use name after cmd", engine));
-        register(new CommandResetGame(RESET_CMD, "Reset current story or specific, use name after cmd as optional parameter", engine));
-        register(new CommandCurrentQuest(CURRENT_CMD, "Get information about current story", engine));
-        register(new CommandSaveGame(SAVE_CMD, "Save current session", engine));
+        register(new CommandStartGame(START_CMD, "start_command", engine));
+        register(new CommandHelp(HELP_CMD, "help_command", engine));
+        register(new CommandQuests(STORIES_CMD, "list_quests", engine));
+        register(new CommandQuestInfo(STORYINFO_CMD, "questinfo_command", engine));
+        register(new CommandResetGame(RESET_CMD, "reset_command", engine));
+        register(new CommandCurrentQuest(CURRENT_CMD, "currentinfo_command", engine));
+        register(new CommandSaveGame(SAVE_CMD, "savesession_command", engine));
+        register(new CommandSetLocale(LOCALE_CMD, "locale_command", engine));
 
         for(int i = 0; i < MAX_ANSWERS; ++i) {
             register(new CommandChoose(String.valueOf(i), "", engine)); //invisible commands
@@ -56,7 +65,6 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
     public TelegramBot(){
         //Order does matter
         try {
-            SettingsLoader.getIntance().loadSettings();
             Translator.getInstance().loadTranslations();
             QuestLoader.getInstance().loadQuests();
 
@@ -67,30 +75,31 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
 
             registerCommands();
         } catch (Exception e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
         }
     }
 
     //@Override
     public String getBotUsername() {
-        return "";
+        return SettingsLoader.getIntance().getSettings().getBotUserName();
     }
 
     //@Override
     public String getBotToken() {
-        return "";
+        return SettingsLoader.getIntance().getSettings().getBotToken();
     }
 
     //In case of invalid unsupported command calling /help
     @Override
     public void processNonCommandUpdate(Update update) {
         if(update.hasMessage()) {
-            Message msg = update.getMessage();
+            Chat chat = update.getMessage().getChat();
+            User usr = update.getMessage().getFrom();
             BotCommand helpCmd = getRegisteredCommand(HELP_CMD);
             if(helpCmd != null) {
-                helpCmd.execute(this, null, msg.getChat(), null);
+                helpCmd.execute(this, usr, chat, null);
             } else {
-                BotLogging.getLogger().error("Command " + HELP_CMD + " should be implemented!");
+                BotLogging.getLogger().fatal("Command " + HELP_CMD + " should be implemented!");
             }
         }
     }

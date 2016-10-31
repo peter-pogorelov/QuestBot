@@ -6,8 +6,11 @@ import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
+import questengine.ActiveSession;
 import questengine.QuestEngine;
 import questpojo.Quest;
+import questutils.Translator;
+import utils.BotLogging;
 
 import java.util.List;
 
@@ -23,7 +26,7 @@ public abstract class QuestBaseCommand extends BotCommand {
         this.engine = engine;
     }
 
-    public boolean isVisible() {
+    public final boolean isVisible() {
         return visible;
     }
 
@@ -41,7 +44,7 @@ public abstract class QuestBaseCommand extends BotCommand {
 
             absSender.sendMessage(msg);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            BotLogging.getLogger().fatal(e);
         }
     }
 
@@ -63,5 +66,18 @@ public abstract class QuestBaseCommand extends BotCommand {
         builder.append(strings[strings.length - 1]);
 
         return builder.toString();
+    }
+
+    public String getLocalizedDescription(String locale) {
+        String desc = getDescription();
+        String startCommandUsage = "";
+        try {
+            startCommandUsage = Translator.getInstance().getTranslation(desc, locale);
+            return startCommandUsage;
+        } catch (Translator.UnknownTranslationException e) {
+            BotLogging.getLogger().fatal(e);
+        }
+
+        return startCommandUsage;
     }
 }

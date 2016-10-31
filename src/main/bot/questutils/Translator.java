@@ -13,7 +13,7 @@ import java.util.TreeMap;
 /**
  * Created by Petr on 24.10.2016.
  */
-public class Translator {
+public final class Translator {
     public static class TranslatorException extends Exception {
         public TranslatorException(String e){
             super(e);

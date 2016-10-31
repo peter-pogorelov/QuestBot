@@ -1,6 +1,5 @@
 package questengine;
 
-import org.glassfish.hk2.utilities.reflection.Logger;
 import questutils.Translator;
 import sessionpojo.GameSession;
 import sessionutils.GameSessionManager;
@@ -48,24 +47,28 @@ public class QuestEngine {
 
         if(session == null) {
             session = getManager().createClientSession(userName, quest); //register session
+            if(session.getLocale() != activeSession.getLocale()){ //TODO:rewrite in a better way
+                session.setLocale(activeSession.getLocale());
+            }
+
             getManager().saveSessions(); //save session in storage
         }
 
         if(activeSession != null) { //save current active session if it already exists
-            if(!activeSession.getQuest().getName().equals(quest.getName())) {
-                saveToGameSession(userName);
-            } else {
-                return; //if this story is already going for this user
+            if(activeSession.getQuest() != null) {
+               if(!activeSession.getQuest().getName().equals(quest.getName())) {
+                   saveProgressToGameSession(userName);
+               }
             }
         }
 
         newActiveSession(quest, session);
     }
 
-    public void saveToGameSession(String userName) throws QuestException {
+    public void saveProgressToGameSession(String userName) throws QuestException {
         ActiveSession activeSession = getActiveSession(userName);
         if(activeSession != null) {
-            getManager().updateGameSession(activeSession.toGameSession());
+            getManager().updateQuestSession(activeSession.toGameSession());
             getManager().saveSessions();
         } else {
             try {

@@ -36,11 +36,11 @@ public class CommandChoose extends QuestBaseCommand{
                 if(activeSession.isQuestEnd()){
                     reply(activeSession.getCurrentQuestion(), absSender, user, chat);
                     reply(finishGame, absSender, user, chat);
-                    try {
-                        engine.saveClientSession(user.getId().toString()); //TODO watch TODO in CommandStartGame
-                    } catch (QuestEngine.QuestException e) {
-                        reply(e.getMessage(), absSender, user, chat);
-                    }
+//                    try {
+//                        engine.saveProgressToGameSession(user.getId().toString()); //TODO watch TODO in CommandStartGame
+//                    } catch (QuestEngine.QuestException e) {
+//                        reply(e.getMessage(), absSender, user, chat);
+//                    }
                 } else {
                     reply(activeSession.getCurrentQuestion(), absSender, user, chat);
                     replyVariant(activeSession.getCurrentAnswers(), absSender, user, chat);
@@ -50,7 +50,7 @@ public class CommandChoose extends QuestBaseCommand{
                 reply(wrongInput, absSender, user, chat);
             }
         } catch (Translator.UnknownTranslationException e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
         }
     }
 }

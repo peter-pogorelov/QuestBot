@@ -9,7 +9,7 @@ import java.io.*;
 /**
  * Created by Petr on 03.10.2016.
  */
-public class PersistentGameSessionManager extends GameSessionManager {
+public final class PersistentGameSessionManager extends GameSessionManager {
     private File file;
     private Gson gson;
 
@@ -26,9 +26,9 @@ public class PersistentGameSessionManager extends GameSessionManager {
             writer.write(gson.toJson(getPool()));
             writer.close();
         } catch (FileNotFoundException e) {
-            BotLogging.getLogger().error(e.getMessage());
+            BotLogging.getLogger().error(e);
         } catch (UnsupportedEncodingException e) {
-            BotLogging.getLogger().error(e.getMessage());
+            BotLogging.getLogger().error(e);
         }
     }
     public void loadSessions() throws Exception {

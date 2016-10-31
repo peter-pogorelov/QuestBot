@@ -60,7 +60,7 @@ public class CommandQuestInfo extends QuestBaseCommand {
                 reply(infoUsage, absSender, user, chat);
             }
         } catch (Translator.UnknownTranslationException e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
         }
     }
 }

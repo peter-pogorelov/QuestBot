@@ -14,7 +14,7 @@ import java.util.Map;
  */
 
 //class used to load quests
-public class QuestLoader {
+public final class QuestLoader {
     public static final String QUEST_DIR = "quests";
     private File dir;
     private List<Quest> questList;

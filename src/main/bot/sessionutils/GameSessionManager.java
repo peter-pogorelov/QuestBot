@@ -40,11 +40,10 @@ public abstract class GameSessionManager {
         this.pool = pool;
     }
 
-    public GameSession createClientSession(String userName, Quest quest) {
+    public GameSession createClientSession(String userName) {
         GameSession gs = new GameSession();
         gs.setGroup(1);
         gs.setNode(1);
-        gs.setQuest(quest.getName());
         gs.setUser(userName);
         gs.setWeight(1);
         gs.setLocale(SettingsLoader.getIntance().getSettings().getLocales().get(0)); //Setting first locale as main locale
@@ -52,11 +51,17 @@ public abstract class GameSessionManager {
         return gs;
     }
 
-    public GameSession getGameSession(String userName, Quest quest) {
+    public GameSession createClientSession(String userName, Quest quest) {
+        GameSession gs = createClientSession(userName);
+        gs.setQuest(quest.getName());
+        return gs;
+    }
+
+    public GameSession getGameSession(String userName) { //return any session
         List<GameSession> sessions = getPool().getSessions();
 
         for(final GameSession session : sessions) {
-            if(session.getUser().equals(userName) && session.getQuest().equals(quest.getName())){
+            if(session.getUser().equals(userName)){
                 return session;
             }
         }
@@ -64,12 +69,26 @@ public abstract class GameSessionManager {
         return null;
     }
 
-    public void updateGameSession(GameSession upd){
+
+    public GameSession getGameSession(String userName, Quest quest) {
+        List<GameSession> sessions = getPool().getSessions();
+
+        for(final GameSession session : sessions) {
+            if(session.getUser() != null && session.getQuest() != null &&
+               session.getUser().equals(userName) && session.getQuest().equals(quest.getName())){
+                return session;
+            }
+        }
+
+        return null;
+    }
+
+    public void updateQuestSession(GameSession upd){
         List<GameSession> sessions = getPool().getSessions();
         GameSession ref = null;
 
         for(final GameSession session : sessions) {
-            if(session.getUser().equals(upd.getUser()) && session.getQuest().equals(upd.getQuest())){
+            if(session.getUser().equals(upd.getUser()) && session.getQuest() != null && session.getQuest().equals(upd.getQuest())){
                 ref = session;
                 break;
             }
@@ -82,21 +101,31 @@ public abstract class GameSessionManager {
         }
     }
 
-    public void deleteClientSession(GameSession del) {
+    public void updateLocale(String userName, String locale) {
         List<GameSession> sessions = getPool().getSessions();
-        GameSession ref = null;
 
         for(final GameSession session : sessions) {
-            if(session.getUser().equals(del.getUser()) && session.getQuest().equals(del.getQuest())){
-                ref = session;
-                break;
+            if(session.getUser().equals(userName)){
+                session.setLocale(locale);
             }
         }
-
-        if(ref != null){
-            sessions.remove(ref);
-        }
     }
+
+//    public void deleteClientSession(GameSession del) {
+//        List<GameSession> sessions = getPool().getSessions();
+//        GameSession ref = null;
+//
+//        for(final GameSession session : sessions) {
+//            if(session.getUser().equals(del.getUser()) && session.getQuest() != null && session.getQuest().equals(del.getQuest())){
+//                ref = session;
+//                break;
+//            }
+//        }
+//
+//        if(ref != null){
+//            sessions.remove(ref);
+//        }
+//    }
 
     public void createEmptyPool() {
         pool = new GameSessionPool();

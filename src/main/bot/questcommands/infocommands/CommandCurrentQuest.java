@@ -6,6 +6,7 @@ import org.telegram.telegrambots.bots.AbsSender;
 import questcommands.QuestBaseCommand;
 import questengine.ActiveSession;
 import questengine.QuestEngine;
+import questpojo.Quest;
 import questutils.Translator;
 import utils.BotLogging;
 
@@ -18,16 +19,19 @@ public class CommandCurrentQuest extends QuestBaseCommand {
     }
 
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        ActiveSession activeSession = engine.getActiveSession(user.getUserName());
-        if(activeSession != null) {
-            reply(activeSession.getQuest().getName(), absSender, user, chat);
-        } else {
-            try {
-                String notPlaying = Translator.getInstance().getTranslation("not_playing", activeSession.toGameSession().getLocale());
-                reply(notPlaying, absSender, user, chat);
-            } catch (Translator.UnknownTranslationException e) {
-                BotLogging.getLogger().fatal(e.getMessage());
+        ActiveSession activeSession = engine.getActiveSession(user.getId().toString());
+        try {
+            if (activeSession != null) {
+                Quest quest = activeSession.getQuest();
+                if(quest != null) {
+                    reply(activeSession.getQuest().getName(), absSender, user, chat);
+                    return;
+                }
             }
+            String notPlaying = Translator.getInstance().getTranslation("not_playing", activeSession.getLocale());
+            reply(notPlaying, absSender, user, chat);
+        } catch (Translator.UnknownTranslationException e) {
+            BotLogging.getLogger().fatal(e);
         }
     }
 }

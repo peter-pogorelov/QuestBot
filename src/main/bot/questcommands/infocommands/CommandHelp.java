@@ -28,19 +28,20 @@ public class CommandHelp extends QuestBaseCommand {
             StringBuilder builder = new StringBuilder();
 
             ActiveSession activeSession = engine.getActiveSession(user.getId().toString());
-            String welcome = Translator.getInstance().getTranslation("welcome", activeSession.getLocale());
+            String welcome = Translator.getInstance().getTranslation("welcome_game", activeSession.getLocale());
             String salute = Translator.getInstance().getTranslation("salute", activeSession.getLocale());
             builder.append(welcome + "\n").append(salute + "\n\n");
 
             for (final BotCommand cmd : cmds) {
                 if (cmd instanceof QuestBaseCommand && ((QuestBaseCommand) cmd).isVisible()) {
-                    builder.append("/").append(cmd.getCommandIdentifier()).append(" - ").append(cmd.getDescription()).append("\n");
+                    builder.append("/").append(cmd.getCommandIdentifier()).append(" - ");
+                    builder.append(((QuestBaseCommand)cmd).getLocalizedDescription(activeSession.getLocale())).append("\n");
                 }
             }
 
             reply(builder.toString(), absSender, user, chat);
         } catch (Exception e) {
-            BotLogging.getLogger().fatal(e.getMessage());
+            BotLogging.getLogger().fatal(e);
         }
     }
 }
