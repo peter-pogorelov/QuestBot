@@ -24,7 +24,7 @@ public class CommandChoose extends QuestBaseCommand{
         int commandId = Integer.parseInt(getCommandIdentifier());
         ActiveSession activeSession = engine.getActiveSession(user.getId().toString()); //TODO watch TODO in CommandStartGame
         try {
-            if(activeSession != null) {
+            if(activeSession != null && activeSession.getQuest() != null && !activeSession.getCurrentAnswers().isEmpty()) {
                 String reply = activeSession.getAnswerReply(commandId);
                 if(reply != null) { //reply can be skipped
                     reply(activeSession.getAnswerReply(commandId), absSender, user, chat); //output reply
@@ -32,7 +32,7 @@ public class CommandChoose extends QuestBaseCommand{
 
                 activeSession.toNextNode(commandId); //go to next node
 
-                String finishGame = Translator.getInstance().getTranslation("finish_game", activeSession.toGameSession().getLocale());
+                String finishGame = Translator.getInstance().getTranslation("finish_game", activeSession.getLocale());
                 if(activeSession.isQuestEnd()){
                     reply(activeSession.getCurrentQuestion(), absSender, user, chat);
                     reply(finishGame, absSender, user, chat);
@@ -46,7 +46,7 @@ public class CommandChoose extends QuestBaseCommand{
                     replyVariant(activeSession.getCurrentAnswers(), absSender, user, chat);
                 }
             } else {
-                String wrongInput = Translator.getInstance().getTranslation("input_error", activeSession.toGameSession().getLocale());
+                String wrongInput = Translator.getInstance().getTranslation("input_error", activeSession.getLocale());
                 reply(wrongInput, absSender, user, chat);
             }
         } catch (Translator.UnknownTranslationException e) {

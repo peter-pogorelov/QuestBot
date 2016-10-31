@@ -16,6 +16,7 @@ public class ActiveSession {
     private QuestGroup group;
     private QuestNode node;
     private String locale;
+    private boolean forceEnding;
 
     public ActiveSession(Quest quest, GameSession gameSession) {
         this(gameSession);
@@ -23,6 +24,8 @@ public class ActiveSession {
         this.group = getGroupFromSession(this.quest, gameSession);
         this.node = getNodeFromSession(group, gameSession);
         this.weight = gameSession.getWeight();
+
+        this.forceEnding = false;
     }
 
     public ActiveSession(GameSession gameSession) {
@@ -54,10 +57,12 @@ public class ActiveSession {
 
     public List<String> getCurrentAnswers() {
         List<String> lst = new ArrayList<String>();
-        QuestAnswer[] answers = getNode().getAnswers();
-        for(final QuestAnswer answer : answers){
-            if(answer != null) { //hack for GSON
-                lst.add(answer.getText());
+        if(getNode().getAnswers() != null) {
+            QuestAnswer[] answers = getNode().getAnswers();
+            for (final QuestAnswer answer : answers) {
+                if (answer != null) { //hack for GSON
+                    lst.add(answer.getText());
+                }
             }
         }
         return lst;
@@ -108,6 +113,14 @@ public class ActiveSession {
                 } else {
                     this.node = nextNode;
                 }
+            } else {
+                int index = getGroup().getId();
+                if(quest.getGroups().length > index) {
+                    this.group = quest.getGroups()[getGroup().getId()]; //id = index + 1, going to next group
+                    this.node = this.group.getNodes()[0];
+                } else {
+                    this.forceEnding = true;
+                }
             }
         }
     }
@@ -132,7 +145,7 @@ public class ActiveSession {
     }
 
     public boolean isQuestEnd() {
-        return this.node.getEnd() != null && this.node.getEnd() == 1;
+        return this.forceEnding || this.node.getEnd() != null && this.node.getEnd() == 1;
     }
 
     //utils functions

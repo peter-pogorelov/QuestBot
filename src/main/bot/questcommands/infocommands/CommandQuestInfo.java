@@ -30,8 +30,8 @@ public class CommandQuestInfo extends QuestBaseCommand {
                 String desc = Translator.getInstance().getTranslation("description_quest", activeSession.getLocale());
 
                 builder.append(auth).append("\n").append(quest.getAuthor()).append("\n")
-                        .append(name).append("\n").append(quest.getName()).append("\"\n")
-                        .append(desc).append("\n").append(quest.getDescription()).append("\"\n");
+                        .append(name).append("\n").append(quest.getName()).append("\n")
+                        .append(desc).append("\n").append(quest.getDescription()).append("\n");
             } catch (Translator.UnknownTranslationException e) {
                 BotLogging.getLogger().fatal(e.getMessage());
             }

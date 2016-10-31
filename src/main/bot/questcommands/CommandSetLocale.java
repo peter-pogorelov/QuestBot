@@ -31,7 +31,7 @@ public class CommandSetLocale extends QuestBaseCommand {
                 String localeChanged = Translator.getInstance().getTranslation("locale_changed", locale);
                 reply(localeChanged, absSender, user, chat);
             } else {
-                String localeNotFound = Translator.getInstance().getTranslation("locale_not_found", locale);
+                String localeNotFound = Translator.getInstance().getTranslation("locale_not_found", activeSession.getLocale());
                 reply(localeNotFound, absSender, user, chat);
             }
         } catch (Translator.UnknownTranslationException e) {
