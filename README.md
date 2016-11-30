@@ -33,6 +33,6 @@ We backup our conversation each month. You can find the history of messages [her
 
 Support Us
 --------------------------------------
-If you want to help us to improve the project, please, contact us [telegramgameengine@gmail.com](mailto:telegramgameengine@gmail.com). 
+If you want to help us to improve the project, please, contact us [telegramgameengine@gmail.com](mailto:telegramgameengine@gmail.com). Or you can support us directly via PayPal.
 
 The information for sponsors could be found [here](https://github.com/AndreyKoryakin/QuestBot/blob/master/TGE.pdf).
